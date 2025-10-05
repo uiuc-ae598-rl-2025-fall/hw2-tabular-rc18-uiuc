@@ -9,7 +9,9 @@ env.reset()
 def SARSA(iterations, stepsize=0.2):	
 	Q = np.zeros((16, 4))
 	gamma = 0.95
-	epsilon = 0.1
+	epsilon = 0.1 if is_slippery else 0.2
+	eval_time_step = iterations // 1000
+	returns_metric = []
 
 	for iter in range(iterations):
 		if iter % 100 == 0:
@@ -20,17 +22,20 @@ def SARSA(iterations, stepsize=0.2):
 
 		while is_end == False:
 			next_state, reward, is_end, _, _ = env.step(action)
-			if reward == 1.0:
-				print("Reached the End")
-			next_action = np.random.choice(np.arange(4)) if np.random.rand() < epsilon else np.argmax(Q[state])
+			next_action = np.random.choice(np.arange(4)) if np.random.rand() < epsilon else np.argmax(Q[next_state])
 
 			Q[state, action] += stepsize * (reward + gamma * Q[next_state, next_action] * (not is_end) - Q[state, action])
 			state = next_state
 			action = next_action
-	
-	return Q
+
+		if iter % eval_time_step == 0 and iter != 0:
+			returns_metric.append(evaluate_val_fn(Q, env))
+
+	return Q, returns_metric
 
 
-Q = SARSA(iterations=100000)
+Q, avg_returns = SARSA(iterations=50000)
 
-visualize_Q(Q)
+plot_eval(avg_returns, is_slippery, "Average Returns using SARSA")
+plot_policy(Q, is_slippery, "Policy using SARSA")
+visualize_policy(Q)
