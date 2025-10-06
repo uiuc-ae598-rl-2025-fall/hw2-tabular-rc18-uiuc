@@ -1,3 +1,8 @@
+monte_carlo.py: Monte Carlo Implementation
+sarsa.py: SARSA Implementation
+q_learning.py: Q-learning Implementation
+
+
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/qZAaOmzv)
 # HW2 - Tabular Methods
 
